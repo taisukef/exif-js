@@ -1,4 +1,4 @@
-# Exif.js
+# EXIF.js
 
 A JavaScript library for reading [EXIF meta data](https://en.wikipedia.org/wiki/Exchangeable_image_file_format) from image files.
 
