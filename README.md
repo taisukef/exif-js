@@ -3,33 +3,18 @@
 A JavaScript library for reading [EXIF meta data](https://en.wikipedia.org/wiki/Exchangeable_image_file_format) from image files.
 
 You can use it on images in the browser, either from an image or a file input element. Both EXIF and IPTC metadata are retrieved.
-This package can also be used in AMD or CommonJS environments.
 
 **Note**: The EXIF standard applies only to `.jpg` and `.tiff` images. EXIF logic in this package is based on the EXIF standard v2.2 ([JEITA CP-3451, included in this repo](/spec/Exif2-2.pdf)).
 
-## Install
-Install `exif-js` through [NPM](https://www.npmjs.com/#getting-started):
-
-    npm install exif-js --save    
-
-Or [Bower](http://bower.io/):
-
-    bower install exif-js --save
-
-Then add a `script` tag in your an HTML in the [best position](http://stackoverflow.com/questions/436411/where-is-the-best-place-to-put-script-tags-in-html-markup) referencing your local file.
-
-```html
-<script src="vendors/exif-js/exif-js"></script>
-```
-
-You can also use a minified version hosted on jsDelivr
-
-```html
-<script src="https://cdn.jsdelivr.net/npm/exif-js"></script>
-```
-
 ## Usage
-The package adds a global `EXIF` variable (or AMD or CommonJS equivalent).
+
+```js
+import { EXIF } from "https://taisukef.github.io/exif-js/EXIF.js";
+
+const bin = new Uint8Array(await Deno.readFile("example/dsc_09827.jpg"));
+const exif = EXIF.readFromBinaryFile(bin.buffer);
+console.log(exif);
+```
 
 Start with calling the `EXIF.getData` function. You pass it an image as a parameter:
 - either an image from a `<img src="image.jpg">`
