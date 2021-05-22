@@ -27,8 +27,9 @@
     <br/>
     <button id="base64test">Base64 Test</button><br/>
 
-    <script type="text/javascript" src="exif.js"></script>
-    <script>
+    <script type="module">
+        import { EXIF } from "./EXIF.js";
+        
         document.getElementById("img1").onclick = function() {
             EXIF.getData(this, function() {
                 var make = EXIF.getTag(this, "Make"),

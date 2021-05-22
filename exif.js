@@ -1055,5 +1055,7 @@
             return EXIF;
         });
     }
-}.call(this));
+}.call(globalThis));
 
+const EXIF = globalThis.EXIF;
+export { EXIF };
