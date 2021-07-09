@@ -1058,4 +1058,17 @@
 }.call(globalThis));
 
 const EXIF = globalThis.EXIF;
+
+EXIF.toLatLng = (exif) => {
+    const toDegree = (v) => {
+        const d = parseInt(v[0]);
+        const m = parseInt(v[1]);
+        const s = parseFloat(v[2]);
+        return d + (m / 60) + (s / 3600);
+    };
+    const lat = toDegree(exif.GPSLatitude) * (exif.GPSLatitudeRef == "S" ? -1 : 1);
+    const lng = toDegree(exif.GPSLongitude) * (exif.GPSLongitudeRef == "W" ? -1 : 1);
+    return { lat, lng };
+};
+
 export { EXIF };
