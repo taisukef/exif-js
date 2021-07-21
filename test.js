@@ -13,3 +13,9 @@ Deno.test("gps", async () => {
     console.log(ll);
     t.assertEquals(ll, { lat: 35.930702777777775, lng: 136.18704166666666 });
 });
+Deno.test("nogps", async () => {
+    const bin = new Uint8Array(await Deno.readFile("example/IMG_3508-nogps.jpg"));
+    const exif = EXIF.readFromBinaryFile(bin.buffer);
+    const ll = EXIF.toLatLng(exif);
+    t.assertEquals(ll, null);
+});

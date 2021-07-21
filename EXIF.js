@@ -1060,6 +1060,9 @@
 const EXIF = globalThis.EXIF;
 
 EXIF.toLatLng = (exif) => {
+    if (!Array.isArray(exif.GPSLatitude) || !Array.isArray(exif.GPSLongitude) || typeof exif.GPSLatitudeRef != "string" || typeof exif.GPSLongitudeRef != "string") {
+        return null;
+    }
     const toDegree = (v) => {
         const d = parseInt(v[0]);
         const m = parseInt(v[1]);
