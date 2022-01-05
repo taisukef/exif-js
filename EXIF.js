@@ -421,30 +421,74 @@
     function findEXIFinJPEG(file) {
         var dataView = new DataView(file);
 
-        if (debug) console.log("Got file of length " + file.byteLength);
+        if (debug) {
+            console.log("Got file of length " + file.byteLength);
+        }
         if ((dataView.getUint8(0) != 0xFF) || (dataView.getUint8(1) != 0xD8)) {
-            if (debug) console.log("Not a valid JPEG");
+            if (debug) {
+                console.log("Not a valid JPEG");
+            }
             return false; // not a valid jpeg
         }
 
-        var offset = 2,
-            length = file.byteLength,
-            marker;
+        let offset = 2;
+        const length = file.byteLength;
 
+        /*
         while (offset < length) {
             if (dataView.getUint8(offset) != 0xFF) {
-                if (debug) console.log("Not a valid marker at offset " + offset + ", found: " + dataView.getUint8(offset));
+                if (debug) {
+                    console.log("Not a valid marker at offset " + offset + ", found: " + dataView.getUint8(offset));
+                }
                 return false; // not a valid marker, something is wrong
             }
 
-            marker = dataView.getUint8(offset + 1);
-            if (debug) console.log(marker);
+            const marker = dataView.getUint8(offset + 1);
+            const len = dataView.getUint16(offset + 2);
+            if (debug) {
+                console.log(marker);
+            }
+            console.log(marker.toString(16), marker, len)
+
+            // we could implement handling for other markers here,
+            // but we're only looking for 0xFFE1 for EXIF data
+            if (marker == 0xe1) { // EXIF
+                const exif = readEXIFData(dataView, offset + 4, dataView.getUint16(offset + 2) - 2);
+                console.log({exif});
+            } else if (marker == 0xe2) { // colorspace ... can't decode
+                const buf = new Uint8Array(len);
+                for (let i = 0; i < len; i++) {
+                    buf[i] = dataView.getUint8(offset + 2 + i);
+                }
+                const icc = new TextDecoder().decode(buf);
+                console.log(icc);
+            }
+            offset += 2 + len;
+        }
+        return;
+        */
+
+        while (offset < length) {
+            if (dataView.getUint8(offset) != 0xFF) {
+                if (debug) {
+                    console.log("Not a valid marker at offset " + offset + ", found: " + dataView.getUint8(offset));
+                }
+                return false; // not a valid marker, something is wrong
+            }
+
+            const marker = dataView.getUint8(offset + 1);
+            if (debug) {
+                console.log(marker);
+            }
+            console.log(marker.toString(16), marker)
 
             // we could implement handling for other markers here,
             // but we're only looking for 0xFFE1 for EXIF data
 
             if (marker == 225) {
-                if (debug) console.log("Found 0xFFE1 marker");
+                if (debug) {
+                    console.log("Found 0xFFE1 marker");
+                }
 
                 return readEXIFData(dataView, offset + 4, dataView.getUint16(offset + 2) - 2);
 
@@ -461,9 +505,13 @@
     function findIPTCinJPEG(file) {
         var dataView = new DataView(file);
 
-        if (debug) console.log("Got file of length " + file.byteLength);
+        if (debug) {
+            console.log("Got file of length " + file.byteLength);
+        }
         if ((dataView.getUint8(0) != 0xFF) || (dataView.getUint8(1) != 0xD8)) {
-            if (debug) console.log("Not a valid JPEG");
+            if (debug) {
+                console.log("Not a valid JPEG");
+            }
             return false; // not a valid jpeg
         }
 
