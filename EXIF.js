@@ -813,6 +813,12 @@
                             StringValues.Components[exifData[tag][2]] +
                             StringValues.Components[exifData[tag][3]];
                         break;
+                    case "UserComment":
+                        const v = exifData[tag];
+                        const enc = new TextDecoder().decode(new Uint8Array(v.slice(0, 8)));
+                        // enc: ASCII or utf-8?
+                        exifData[tag] = new TextDecoder().decode(new Uint8Array(v.slice(8)));
+                        break;
                 }
                 tags[tag] = exifData[tag];
             }
@@ -1045,8 +1051,13 @@
         }
         return strPretty;
     }
-
+    const typedArrayToBuffer = (array) => {
+        return array.buffer.slice(array.byteOffset, array.byteLength + array.byteOffset)
+    }
     EXIF.readFromBinaryFile = function(file) {
+        if (file instanceof Uint8Array) {
+            file = typedArrayToBuffer(file);
+        }
         return findEXIFinJPEG(file);
     }
 
