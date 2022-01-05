@@ -480,7 +480,7 @@
             if (debug) {
                 console.log(marker);
             }
-            console.log(marker.toString(16), marker)
+            //console.log(marker.toString(16), marker)
 
             // we could implement handling for other markers here,
             // but we're only looking for 0xFFE1 for EXIF data
@@ -866,6 +866,11 @@
                         const enc = new TextDecoder().decode(new Uint8Array(v.slice(0, 8)));
                         // enc: ASCII or utf-8?
                         exifData[tag] = new TextDecoder().decode(new Uint8Array(v.slice(8)));
+                        break;
+                    case "ColorSpace":
+                        if (exifData[tag] == 1) {
+                            exifData[tag] = "sRGB";
+                        }
                         break;
                 }
                 tags[tag] = exifData[tag];
